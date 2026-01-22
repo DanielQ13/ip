@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Galath {
-    private static String[] tasks = new String[100];
+    private static Task[] tasks = new Task[100];
     private static int taskCount = 0;
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -17,6 +17,10 @@ public class Galath {
                 break;
             } else if (command.equals("list")) {
                 listTasks();
+            } else if (command.startsWith("mark ")) {
+                handleMark(command);
+            } else if (command.startsWith("unmark ")) {
+                handleUnmark(command);
             } else {
                 addTask(command);
             }
@@ -25,10 +29,10 @@ public class Galath {
         scanner.close();
     }
 
-    private static void addTask(String task) {
-        tasks[taskCount] = task;
+    private static void addTask(String description) {
+        tasks[taskCount] = new Task(description);
         taskCount++;
-        printMessage("added: " + task);
+        printMessage("added: " + description);
     }
 
     private static void listTasks() {
@@ -41,7 +45,31 @@ public class Galath {
         }
         printMessage(taskList.toString());
     }
-    
+
+    private static void handleMark(String command) {
+        try {
+            int taskIndex = Integer.parseInt(command.split(" ")[1]) - 1;
+            if (taskIndex >= 0 && taskIndex < taskCount) {
+                tasks[taskIndex].markAsDone();
+                printMessage("Nice! I've marked this task as done:\n      " + tasks[taskIndex]);
+            }
+        } catch (NumberFormatException e) {
+            printMessage("Invalid task number!");
+        }
+    }
+
+    private static void handleUnmark(String command) {
+        try {
+            int taskIndex = Integer.parseInt(command.split(" ")[1]) - 1;
+            if (taskIndex >= 0 && taskIndex < taskCount) {
+                tasks[taskIndex].markAsNotDone();
+                printMessage("OK, I've marked this task as not done yet:\n      " + tasks[taskIndex]);
+            }
+        } catch (NumberFormatException e) {
+            printMessage("Invalid task number!");
+        }
+    }
+
     private static void printMessage(String message) {
         System.out.println("    " + message);
     }

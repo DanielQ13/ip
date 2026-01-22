@@ -21,27 +21,57 @@ public class Galath {
                 handleMark(command);
             } else if (command.startsWith("unmark ")) {
                 handleUnmark(command);
+            }  else if (command.startsWith("todo ")) {
+                handleTodo(command);
+            } else if (command.startsWith("deadline ")) {
+                handleDeadline(command);
+            } else if (command.startsWith("event ")) {
+                handleEvent(command);
             } else {
-                addTask(command);
+                printMessage("OOPS!!! I'm sorry, but I don't know what that means :-(");
             }
         }
 
         scanner.close();
     }
 
-    private static void addTask(String description) {
-        tasks[taskCount] = new Task(description);
+    private static void handleTodo(String command) {
+        String description = command.substring(5).trim();
+        Task task = new Todo(description);
+        tasks[taskCount] = task;
         taskCount++;
-        printMessage("added: " + description);
+        printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + taskCount + " tasks in the list.");
+    }
+
+    private static void handleDeadline(String command) {
+        String[] parts = command.substring(9).split(" /by ");
+        if (parts.length == 2) {
+            String description = parts[0].trim();
+            String by = parts[1].trim();
+            Task task = new Deadline(description, by);
+            tasks[taskCount] = task;
+            taskCount++;
+            printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + taskCount + " tasks in the list.");
+        }
+    }
+
+    private static void handleEvent(String command) {
+        String[] parts = command.substring(6).split(" /from | /to ");
+        if (parts.length == 3) {
+            String description = parts[0].trim();
+            String from = parts[1].trim();
+            String to = parts[2].trim();
+            Task task = new Event(description, from, to);
+            tasks[taskCount] = task;
+            taskCount++;
+            printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + taskCount + " tasks in the list.");
+        }
     }
 
     private static void listTasks() {
-        StringBuilder taskList = new StringBuilder();
+        StringBuilder taskList = new StringBuilder("Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
-            taskList.append((i + 1)).append(". ").append(tasks[i]);
-            if (i < taskCount - 1) {
-                taskList.append("\n    ");
-            }
+            taskList.append("\n    ").append((i + 1)).append(".").append(tasks[i]);
         }
         printMessage(taskList.toString());
     }

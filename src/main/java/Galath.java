@@ -1,8 +1,8 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Galath {
-    private static Task[] tasks = new Task[100];
-    private static int taskCount = 0;
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -36,6 +36,14 @@ public class Galath {
                 }
             } else if (command.equals("unmark")) {
                 printMessage("OOPS!!! Please specify which task to unmark.\n    Example: unmark 2");
+            } else if (command.startsWith("delete ")) {
+                try {
+                    handleDelete(command);
+                } catch (GalathException e) {
+                    printMessage("OOPS!!! " + e.getMessage());
+                }
+            } else if (command.equals("delete")) {
+                printMessage("OOPS!!! Please specify which task to delete.\n    Example: delete 3");
             }  else if (command.startsWith("todo ")) {
                 try {
                     handleTodo(command);
@@ -79,9 +87,8 @@ public class Galath {
             throw new GalathException("The description of a todo cannot be empty.");
         }
         Task task = new Todo(description);
-        tasks[taskCount] = task;
-        taskCount++;
-        printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + taskCount + " tasks in the list.");
+        tasks.add(task);
+        printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
@@ -110,9 +117,8 @@ public class Galath {
             throw new GalathException("Please specify when the deadline is due.");
         }
         Task task = new Deadline(description, by);
-        tasks[taskCount] = task;
-        taskCount++;
-        printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + taskCount + " tasks in the list.");
+        tasks.add(task);
+        printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /**
@@ -148,16 +154,15 @@ public class Galath {
             throw new GalathException("Please specify when the event ends.");
         }
         Task task = new Event(description, from, to);
-        tasks[taskCount] = task;
-        taskCount++;
-        printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + taskCount + " tasks in the list.");
+        tasks.add(task);
+        printMessage("Got it. I've added this task:\n      " + task + "\n    Now you have " + tasks.size() + " tasks in the list.");
     }
 
     // Displays all tasks in the list
     private static void listTasks() {
         StringBuilder taskList = new StringBuilder("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            taskList.append("\n    ").append((i + 1)).append(".").append(tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            taskList.append("\n    ").append((i + 1)).append(".").append(tasks.get(i));
         }
         printMessage(taskList.toString());
     }
@@ -174,11 +179,11 @@ public class Galath {
         }
         try {
             int taskIndex = Integer.parseInt(numberStr) - 1;
-            if (taskIndex < 0 || taskIndex >= taskCount) {
-                throw new GalathException("Task number " + (taskIndex + 1) + " does not exist. You have " + taskCount + " task(s) in your list.");
+            if (taskIndex < 0 || taskIndex >= tasks.size()) {
+                throw new GalathException("Task number " + (taskIndex + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
             }
-            tasks[taskIndex].markAsDone();
-            printMessage("Nice! I've marked this task as done:\n      " + tasks[taskIndex]);
+            tasks.get(taskIndex).markAsDone();
+            printMessage("Nice! I've marked this task as done:\n      " + tasks.get(taskIndex));
         } catch (NumberFormatException e) {
             throw new GalathException("Invalid task number. Please provide a valid number.\n    Example: mark 2");
         }
@@ -196,13 +201,35 @@ public class Galath {
         }
         try {
             int taskIndex = Integer.parseInt(numberStr) - 1;
-            if (taskIndex < 0 || taskIndex >= taskCount) {
-                throw new GalathException("Task number " + (taskIndex + 1) + " does not exist. You have " + taskCount + " task(s) in your list.");
+            if (taskIndex < 0 || taskIndex >= tasks.size()) {
+                throw new GalathException("Task number " + (taskIndex + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
             }
-            tasks[taskIndex].markAsNotDone();
-            printMessage("OK, I've marked this task as not done yet:\n       " + tasks[taskIndex]);
+            tasks.get(taskIndex).markAsNotDone();
+            printMessage("OK, I've marked this task as not done yet:\n       " + tasks.get(taskIndex));
         } catch (NumberFormatException e) {
             throw new GalathException("Invalid task number. Please provide a valid number.\n     Example: unmark 2");
+        }
+    }
+
+    /**
+     * Deletes a task from the list
+     * @param command The delete command with task number
+     * @throws GalathException if the task number is invalid
+     */
+    private static void handleDelete(String command) throws GalathException {
+        String numberStr = command.substring(7).trim();
+        if (numberStr.isEmpty()) {
+            throw new GalathException("Please specify which task to delete.\n    Example: delete 3");
+        }
+        try {
+            int taskIndex = Integer.parseInt(numberStr) - 1;
+            if (taskIndex < 0 || taskIndex >= tasks.size()) {
+                throw new GalathException("Task number " + (taskIndex + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
+            }
+            Task removedTask = tasks.remove(taskIndex);
+            printMessage("Noted. I've removed this task:\n      " + removedTask + "\n    Now you have " + tasks.size() + " tasks in the list.");
+        } catch (NumberFormatException e) {
+            throw new GalathException("Invalid task number. Please provide a valid number.\n    Example: delete 3");
         }
     }
 

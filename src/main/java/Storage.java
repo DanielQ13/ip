@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
  */
 public class Storage {
     private final Path filePath;
+    private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     /**
      * Creates a Storage instance with the specified file path.
@@ -115,20 +118,27 @@ public class Storage {
 
         Task task = null;
 
-        switch (taskType) {
-            case "T":
-                task = new Todo(description);
-                break;
-            case "D":
-                if (parts.length >= 4) {
-                    task = new Deadline(description, parts[3]);
-                }
-                break;
-            case "E":
-                if (parts.length >= 5) {
-                    task = new Event(description, parts[3], parts[4]);
-                }
-                break;
+        try {
+            switch (taskType) {
+                case "T":
+                    task = new Todo(description);
+                    break;
+                case "D":
+                    if (parts.length >= 4) {
+                        LocalDateTime by = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
+                        task = new Deadline(description, by);
+                    }
+                    break;
+                case "E":
+                    if (parts.length >= 5) {
+                        LocalDateTime from = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
+                        LocalDateTime to = LocalDateTime.parse(parts[4], STORAGE_FORMAT);
+                        task = new Event(description, from, to);
+                    }
+                    break;
+            }
+        } catch (Exception e) {
+            return null;  // Skip if parsing fails
         }
 
         if (task != null && isDone) {
@@ -153,10 +163,13 @@ public class Storage {
             line = "T | " + isDone + " | " + task.getDescription();
         } else if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
-            line = "D | " + isDone + " | " + task.getDescription() + " | " + deadline.getBy();
+            String byStr = deadline.getBy().format(STORAGE_FORMAT);
+            line = "D | " + isDone + " | " + task.getDescription() + " | " + byStr;
         } else if (task instanceof Event) {
             Event event = (Event) task;
-            line = "E | " + isDone + " | " + task.getDescription() + " | " + event.getFrom() + " | " + event.getTo();
+            String fromStr = event.getFrom().format(STORAGE_FORMAT);
+            String toStr = event.getTo().format(STORAGE_FORMAT);
+            line = "E | " + isDone + " | " + task.getDescription() + " | " + fromStr + " | " + toStr;
         }
 
         return line;

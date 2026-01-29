@@ -67,7 +67,7 @@ public class Galath {
                     printMessage("OOPS!!! " + e.getMessage());
                 }
             } else if (command.equals("deadline")) {
-                printMessage("OOPS!!! The description of a deadline cannot be empty.\n     Example: deadline return book /by Sunday");
+                printMessage("OOPS!!! The description of a deadline cannot be empty.\n     Example: deadline return book /by 2019-12-02 or deadline return book /by 2019-12-02 1800");
             } else if (command.startsWith("event ")) {
                 try {
                     handleEvent(command);
@@ -75,7 +75,13 @@ public class Galath {
                     printMessage("OOPS!!! " + e.getMessage());
                 }
             } else if (command.equals("event")) {
-                printMessage("OOPS!!! The description of an event cannot be empty.\n     Example: event project meeting /from Mon 2pm /to 4pm");
+                printMessage("OOPS!!! The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
+            } else if (command.startsWith("on ")) {
+                try {
+                    handleOn(command);
+                } catch (GalathException e) {
+                    printMessage("OOPS!!! " + e.getMessage());
+                }
             } else {
                 printMessage("OOPS!!! I'm sorry, but I don't know what that means :-(");
             }
@@ -111,11 +117,11 @@ public class Galath {
             throw new GalathException("The description of a deadline cannot be empty.");
         }
         if (!input.contains("/by")) {
-            throw new GalathException("Please specify when the deadline is due using '/by'.\n     Example: deadline return book /by Sunday");
+            throw new GalathException("Please specify when the deadline is due using '/by'.\n     Example: deadline return book /by 2019-12-02 or deadline return book /by 2019-12-02 1800");
         }
         String[] parts = input.split(" /by ", 2);
         if (parts.length != 2) {
-            throw new GalathException("Invalid deadline format. Use: deadline <description> /by <date>");
+            throw new GalathException("Invalid deadline format. Use: deadline <description> /by <date>\n     Example: deadline return book /by 2019-12-02");
         }
         String description = parts[0].trim();
         String by = parts[1].trim();
@@ -142,14 +148,14 @@ public class Galath {
             throw new GalathException("The description of an event cannot be empty.");
         }
         if (!input.contains("/from")) {
-            throw new GalathException("Please specify when the event starts using '/from'.\n     Example: event project meeting /from Mon 2pm /to 4pm");
+            throw new GalathException("Please specify when the event starts using '/from'.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
         }
         if (!input.contains("/to")) {
-            throw new GalathException("Please specify when the event ends using '/to'.\n     Example: event project meeting /from Mon 2pm /to 4pm");
+            throw new GalathException("Please specify when the event ends using '/to'.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
         }
         String[] parts = input.split(" /from | /to ", 3);
         if (parts.length != 3) {
-            throw new GalathException("Invalid event format. Use: event <description> /from <start> /to <end>");
+            throw new GalathException("Invalid event format. Use: event <description> /from <start> /to <end>\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
         }
         String description = parts[0].trim();
         String from = parts[1].trim();
@@ -246,6 +252,52 @@ public class Galath {
             printMessage("Noted. I've removed this task:\n       " + removedTask + "\n     Now you have " + tasks.size() + " tasks in the list.");
         } catch (NumberFormatException e) {
             throw new GalathException("Invalid task number. Please provide a valid number.\n     Example: delete 3");
+        }
+    }
+
+    /**
+     * Shows tasks occurring on a specific date
+     * @param command The on command with date
+     * @throws GalathException if the date format is invalid
+     */
+    private static void handleOn(String command) throws GalathException {
+        String dateStr = command.substring(3).trim();
+        if (dateStr.isEmpty()) {
+            throw new GalathException("Please specify a date.\n     Example: on 2019-12-02");
+        }
+
+        try {
+            java.time.LocalDate searchDate = java.time.LocalDate.parse(dateStr);
+            ArrayList<Task> matchingTasks = new ArrayList<>();
+
+            for (Task task : tasks) {
+                if (task instanceof Deadline) {
+                    Deadline deadline = (Deadline) task;
+                    if (deadline.getBy().toLocalDate().equals(searchDate)) {
+                        matchingTasks.add(task);
+                    }
+                } else if (task instanceof Event) {
+                    Event event = (Event) task;
+                    java.time.LocalDate eventStart = event.getFrom().toLocalDate();
+                    java.time.LocalDate eventEnd = event.getTo().toLocalDate();
+                    if (!searchDate.isBefore(eventStart) && !searchDate.isAfter(eventEnd)) {
+                        matchingTasks.add(task);
+                    }
+                }
+            }
+
+            if (matchingTasks.isEmpty()) {
+                printMessage("No tasks found on " + searchDate.format(java.time.format.DateTimeFormatter.ofPattern("MMM d yyyy")));
+            } else {
+                StringBuilder result = new StringBuilder("Here are the tasks on " +
+                        searchDate.format(java.time.format.DateTimeFormatter.ofPattern("MMM d yyyy")) + ":");
+                for (int i = 0; i < matchingTasks.size(); i++) {
+                    result.append("\n     ").append((i + 1)).append(".").append(matchingTasks.get(i));
+                }
+                printMessage(result.toString());
+            }
+        } catch (java.time.format.DateTimeParseException e) {
+            throw new GalathException("Invalid date format. Please use: yyyy-MM-dd\n     Example: on 2019-12-02");
         }
     }
 

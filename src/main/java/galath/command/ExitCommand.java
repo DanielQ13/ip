@@ -1,5 +1,12 @@
+package galath.command;
+
+import galath.command.Command;
+import galath.task.*;
+import galath.ui.Ui;
+import galath.storage.Storage;
+
 /**
- * Command to exit the program.
+ * galath.command.Command to exit the program.
  */
 public class ExitCommand extends Command {
 

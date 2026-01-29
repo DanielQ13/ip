@@ -1,9 +1,17 @@
+package galath.command;
+
+import galath.command.Command;
+import galath.task.*;
+import galath.ui.*;
+import galath.storage.*;
+import galath.exception.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * Command to find tasks on a specific date.
+ * galath.command.Command to find tasks on a specific date.
  */
 public class FindOnCommand extends Command {
     private final LocalDate date;

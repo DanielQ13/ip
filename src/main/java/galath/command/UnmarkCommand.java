@@ -1,7 +1,15 @@
+package galath.command;
+
+import galath.command.Command;
+import galath.task.*;
+import galath.ui.*;
+import galath.storage.*;
+import galath.exception.*;
+
 import java.io.IOException;
 
 /**
- * Command to mark a task as not done.
+ * galath.command.Command to mark a task as not done.
  */
 public class UnmarkCommand extends Command {
     private final int taskIndex;

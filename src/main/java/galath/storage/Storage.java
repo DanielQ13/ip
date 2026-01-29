@@ -1,3 +1,7 @@
+package galath.storage;
+
+import galath.task.*;
+import galath.exception.GalathException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -96,11 +100,11 @@ public class Storage {
     }
 
     /**
-     * Parses a line from the file into a Task object.
+     * Parses a line from the file into a galath.task.Task object.
      * Format: TaskType | isDone | description | [extra fields]
      *
      * @param line The line to parse
-     * @return The parsed Task, or null if invalid
+     * @return The parsed galath.task.Task, or null if invalid
      */
     private Task parseTaskFromLine(String line) {
         if (line.trim().isEmpty()) {
@@ -149,7 +153,7 @@ public class Storage {
     }
 
     /**
-     * Converts a Task object to a line for saving to file.
+     * Converts a galath.task.Task object to a line for saving to file.
      * Format: TaskType | isDone | description | [extra fields]
      *
      * @param task The task to convert

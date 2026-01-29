@@ -1,7 +1,15 @@
+package galath.command;
+
+import galath.command.Command;
+import galath.task.*;
+import galath.ui.Ui;
+import galath.storage.*;
+import galath.exception.*;
+
 import java.io.IOException;
 
 /**
- * Command to add an event task.
+ * galath.command.Command to add an event task.
  */
 public class AddEventCommand extends Command {
     private final String description;

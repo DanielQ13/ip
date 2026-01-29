@@ -1,3 +1,7 @@
+package galath.parser;
+
+import galath.command.*;
+import galath.exception.GalathException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -7,10 +11,10 @@ import java.time.format.DateTimeParseException;
 public class Parser {
 
     /**
-     * Parses a user command and returns the appropriate Command object.
+     * Parses a user command and returns the appropriate galath.command.Command object.
      *
      * @param fullCommand The full command string from the user
-     * @return The parsed Command object
+     * @return The parsed galath.command.Command object
      * @throws GalathException if the command is invalid
      */
     public static Command parse(String fullCommand) throws GalathException {

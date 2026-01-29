@@ -1,3 +1,8 @@
+package galath.task;
+
+import galath.task.Task;
+import galath.exception.*;
+
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -41,7 +46,7 @@ public class TaskList {
      */
     public Task deleteTask(int index) throws GalathException {
         if (index < 0 || index >= tasks.size()) {
-            throw new GalathException("Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
+            throw new GalathException("galath.task.Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
         }
         return tasks.remove(index);
     }
@@ -55,7 +60,7 @@ public class TaskList {
      */
     public Task getTask(int index) throws GalathException {
         if (index < 0 || index >= tasks.size()) {
-            throw new GalathException("Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
+            throw new GalathException("galath.task.Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
         }
         return tasks.get(index);
     }

@@ -1,3 +1,12 @@
+package galath;
+
+import galath.command.Command;
+import galath.exception.GalathException;
+import galath.parser.Parser;
+import galath.storage.Storage;
+import galath.task.TaskList;
+import galath.ui.Ui;
+
 /**
  * Main class for the Galath chatbot.
  */
@@ -46,7 +55,7 @@ public class Galath {
     /**
      * Main entry point for the application.
      *
-     * @param args Command line arguments (not used)
+     * @param args galath.command.Command line arguments (not used)
      */
     public static void main(String[] args) {
         new Galath(FILE_PATH).run();

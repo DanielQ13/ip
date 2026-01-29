@@ -1,3 +1,5 @@
+package galath.ui;
+
 import java.util.Scanner;
 
 /**

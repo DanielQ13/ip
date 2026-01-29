@@ -1,5 +1,13 @@
+package galath.command;
+
+import galath.command.Command;
+import galath.task.*;
+import galath.ui.*;
+import galath.storage.*;
+import galath.exception.*;
+
 /**
- * Command to list all tasks.
+ * galath.command.Command to list all tasks.
  */
 public class ListCommand extends Command {
 

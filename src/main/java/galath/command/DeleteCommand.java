@@ -1,7 +1,15 @@
+package galath.command;
+
+import galath.command.Command;
+import galath.task.*;
+import galath.ui.*;
+import galath.storage.*;
+import galath.exception.*;
+
 import java.io.IOException;
 
 /**
- * Command to delete a task.
+ * galath.command.Command to delete a task.
  */
 public class DeleteCommand extends Command {
     private final int taskIndex;

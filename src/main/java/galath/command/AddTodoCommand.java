@@ -1,20 +1,24 @@
+package galath.command;
+
+import galath.task.*;
+import galath.ui.*;
+import galath.storage.*;
+import galath.exception.*;
 import java.io.IOException;
 
 /**
- * Command to add a deadline task.
+ * galath.command.Command to add a todo task.
  */
-public class AddDeadlineCommand extends Command {
+public class AddTodoCommand extends Command {
     private final String description;
-    private final String by;
 
-    public AddDeadlineCommand(String description, String by) {
+    public AddTodoCommand(String description) {
         this.description = description;
-        this.by = by;
     }
 
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws GalathException {
-        Task task = new Deadline(description, by);
+        Task task = new Todo(description);
         tasks.addTask(task);
 
         try {

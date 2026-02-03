@@ -1,6 +1,5 @@
 package galath.task;
 
-import galath.task.Task;
 import galath.exception.*;
 
 import java.util.ArrayList;

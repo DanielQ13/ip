@@ -1,6 +1,5 @@
 package galath.command;
 
-import galath.command.Command;
 import galath.task.*;
 import galath.ui.*;
 import galath.storage.*;

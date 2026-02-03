@@ -1,6 +1,5 @@
 package galath.task;
 
-import galath.task.*;
 import galath.exception.*;
 
 import java.time.LocalDateTime;

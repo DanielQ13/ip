@@ -1,11 +1,13 @@
 package galath.command;
 
-import galath.task.*;
-import galath.ui.*;
-import galath.storage.*;
-import galath.exception.*;
-
 import java.io.IOException;
+
+import galath.exception.GalathException;
+import galath.storage.Storage;
+import galath.task.Deadline;
+import galath.task.Task;
+import galath.task.TaskList;
+import galath.ui.Ui;
 
 /**
  * galath.command.Command to add a deadline task.

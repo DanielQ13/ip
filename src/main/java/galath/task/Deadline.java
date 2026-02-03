@@ -1,10 +1,10 @@
 package galath.task;
 
-import galath.exception.GalathException;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import galath.exception.GalathException;
 
 /**
  * Represents a deadline task that needs to be done before a specific date/time.
@@ -14,11 +14,11 @@ import java.time.format.DateTimeParseException;
  * Displays as: "MMM d yyyy" or "MMM d yyyy, h:mma"
  */
 public class Deadline extends Task {
-    protected LocalDateTime by;
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter INPUT_FORMAT_DATE_ONLY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM d yyyy, h:mma");
     private static final DateTimeFormatter OUTPUT_FORMAT_DATE_ONLY = DateTimeFormatter.ofPattern("MMM d yyyy");
+    protected LocalDateTime by;
 
     /**
      * Creates a new Deadline task with a date/time string.

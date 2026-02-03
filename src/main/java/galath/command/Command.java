@@ -1,9 +1,9 @@
 package galath.command;
 
+import galath.exception.GalathException;
+import galath.storage.Storage;
 import galath.task.TaskList;
 import galath.ui.Ui;
-import galath.storage.Storage;
-import galath.exception.GalathException;
 
 /**
  * Abstract class representing a user command.

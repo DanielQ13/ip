@@ -1,12 +1,12 @@
 package galath.command;
 
-import galath.task.TaskList;
-import galath.task.Task;
-import galath.ui.Ui;
-import galath.storage.Storage;
-import galath.exception.GalathException;
-
 import java.io.IOException;
+
+import galath.exception.GalathException;
+import galath.storage.Storage;
+import galath.task.Task;
+import galath.task.TaskList;
+import galath.ui.Ui;
 
 /**
  * Command to mark a task as done.

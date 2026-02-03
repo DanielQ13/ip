@@ -1,9 +1,8 @@
 package galath.command;
 
-import galath.task.TaskList;
-import galath.task.Task;
-import galath.ui.Ui;
 import galath.storage.Storage;
+import galath.task.TaskList;
+import galath.ui.Ui;
 
 /**
  * Command to exit the program.

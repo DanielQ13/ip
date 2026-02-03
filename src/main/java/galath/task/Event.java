@@ -1,10 +1,10 @@
 package galath.task;
 
-import galath.exception.GalathException;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import galath.exception.GalathException;
 
 /**
  * Represents an event task that starts at a specific time and ends at another time.
@@ -14,12 +14,12 @@ import java.time.format.DateTimeParseException;
  * Displays as: "MMM d yyyy" or "MMM d yyyy, h:mma"
  */
 public class Event extends Task {
-    protected LocalDateTime from;
-    protected LocalDateTime to;
     private static final DateTimeFormatter INPUT_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final DateTimeFormatter INPUT_FORMAT_DATE_ONLY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final DateTimeFormatter OUTPUT_FORMAT = DateTimeFormatter.ofPattern("MMM d yyyy, h:mma");
     private static final DateTimeFormatter OUTPUT_FORMAT_DATE_ONLY = DateTimeFormatter.ofPattern("MMM d yyyy");
+    protected LocalDateTime from;
+    protected LocalDateTime to;
 
     /**
      * Creates a new Event task with date/time strings.

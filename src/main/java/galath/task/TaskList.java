@@ -1,9 +1,9 @@
 package galath.task;
 
-import galath.exception.*;
-
-import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.ArrayList;
+
+import galath.exception.GalathException;
 
 /**
  * Manages the list of tasks.

@@ -1,12 +1,13 @@
 package galath.command;
 
+import java.io.IOException;
+
+import galath.exception.GalathException;
+import galath.storage.Storage;
+import galath.task.Task;
 import galath.task.TaskList;
 import galath.task.Todo;
-import galath.task.Task;
 import galath.ui.Ui;
-import galath.storage.Storage;
-import galath.exception.GalathException;
-import java.io.IOException;
 
 /**
  * Command to add a todo task to the task list.

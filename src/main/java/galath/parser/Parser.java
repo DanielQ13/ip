@@ -1,21 +1,44 @@
 package galath.parser;
 
-import galath.command.*;
-import galath.exception.GalathException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+import galath.command.AddDeadlineCommand;
+import galath.command.AddEventCommand;
+import galath.command.AddTodoCommand;
+import galath.command.Command;
+import galath.command.DeleteCommand;
+import galath.command.ExitCommand;
+import galath.command.FindCommand;
+import galath.command.FindOnCommand;
+import galath.command.ListCommand;
+import galath.command.MarkCommand;
+import galath.command.UnmarkCommand;
+import galath.exception.GalathException;
+
 /**
- * Parses user commands.
+ * Parses user input commands and converts them into Command objects.
+ * <p>
+ * Supports the following commands:
+ * - bye: Exit the program
+ * - list: List all tasks
+ * - todo DESCRIPTION: Add a todo task
+ * - deadline DESCRIPTION /by DATE: Add a deadline task
+ * - event DESCRIPTION /from START /to END: Add an event task
+ * - mark INDEX: Mark a task as done
+ * - unmark INDEX: Mark a task as not done
+ * - delete INDEX: Delete a task
+ * - find KEYWORD: Find tasks containing keyword
+ * - on DATE: Find tasks on a specific date
  */
 public class Parser {
 
     /**
-     * Parses a user command and returns the appropriate galath.command.Command object.
+     * Parses a user command and returns the appropriate Command object.
      *
      * @param fullCommand The full command string from the user
-     * @return The parsed galath.command.Command object
-     * @throws GalathException if the command is invalid
+     * @return The parsed Command object ready to be executed
+     * @throws GalathException if the command is invalid or malformed
      */
     public static Command parse(String fullCommand) throws GalathException {
         String trimmedCommand = fullCommand.trim();
@@ -50,6 +73,10 @@ public class Parser {
             throw new GalathException("The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
         } else if (trimmedCommand.startsWith("on ")) {
             return parseOnCommand(trimmedCommand);
+        } else if (trimmedCommand.startsWith("find ")) {
+            return parseFindCommand(trimmedCommand);
+        } else if (trimmedCommand.equals("find")) {
+            throw new GalathException("Please specify a keyword to search for.\n     Example: find book");
         } else {
             throw new GalathException("I'm sorry, but I don't know what that means :-(");
         }
@@ -166,5 +193,13 @@ public class Parser {
         } catch (DateTimeParseException e) {
             throw new GalathException("Invalid date format. Please use: yyyy-MM-dd\n     Example: on 2019-12-02");
         }
+    }
+
+    private static Command parseFindCommand(String command) throws GalathException {
+        String keyword = command.substring(5).trim();
+        if (keyword.isEmpty()) {
+            throw new GalathException("Please specify a keyword to search for.\n     Example: find book");
+        }
+        return new FindCommand(keyword);
     }
 }

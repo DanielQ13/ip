@@ -45,7 +45,7 @@ public class TaskList {
      */
     public Task deleteTask(int index) throws GalathException {
         if (index < 0 || index >= tasks.size()) {
-            throw new GalathException("galath.task.Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
+            throw new GalathException("Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
         }
         return tasks.remove(index);
     }
@@ -59,7 +59,7 @@ public class TaskList {
      */
     public Task getTask(int index) throws GalathException {
         if (index < 0 || index >= tasks.size()) {
-            throw new GalathException("galath.task.Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
+            throw new GalathException("Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
         }
         return tasks.get(index);
     }
@@ -104,6 +104,26 @@ public class TaskList {
                 if (!date.isBefore(eventStart) && !date.isAfter(eventEnd)) {
                     matchingTasks.add(task);
                 }
+            }
+        }
+
+        return matchingTasks;
+    }
+
+    /**
+     * Finds tasks containing the specified keyword in their description.
+     * The search is case-insensitive.
+     *
+     * @param keyword The keyword to search for
+     * @return ArrayList of tasks matching the keyword
+     */
+    public ArrayList<Task> findTasks(String keyword) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase();
+
+        for (Task task : tasks) {
+            if (task.getDescription().toLowerCase().contains(lowerKeyword)) {
+                matchingTasks.add(task);
             }
         }
 

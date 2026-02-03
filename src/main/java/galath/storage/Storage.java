@@ -1,7 +1,5 @@
 package galath.storage;
 
-import galath.task.*;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,12 +10,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import galath.task.Deadline;
+import galath.task.Event;
+import galath.task.Task;
+import galath.task.Todo;
+
 /**
  * Handles loading and saving tasks to a file.
  */
 public class Storage {
-    private final Path filePath;
     private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    private final Path filePath;
 
     /**
      * Creates a Storage instance with the specified file path.
@@ -123,22 +126,22 @@ public class Storage {
 
         try {
             switch (taskType) {
-                case "T":
-                    task = new Todo(description);
-                    break;
-                case "D":
-                    if (parts.length >= 4) {
-                        LocalDateTime by = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
-                        task = new Deadline(description, by);
-                    }
-                    break;
-                case "E":
-                    if (parts.length >= 5) {
-                        LocalDateTime from = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
-                        LocalDateTime to = LocalDateTime.parse(parts[4], STORAGE_FORMAT);
-                        task = new Event(description, from, to);
-                    }
-                    break;
+            case "T":
+                task = new Todo(description);
+                break;
+            case "D":
+                if (parts.length >= 4) {
+                    LocalDateTime by = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
+                    task = new Deadline(description, by);
+                }
+                break;
+            case "E":
+                if (parts.length >= 5) {
+                    LocalDateTime from = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
+                    LocalDateTime to = LocalDateTime.parse(parts[4], STORAGE_FORMAT);
+                    task = new Event(description, from, to);
+                }
+                break;
             }
         } catch (Exception e) {
             return null;  // Skip if parsing fails

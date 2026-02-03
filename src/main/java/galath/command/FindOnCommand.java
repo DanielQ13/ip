@@ -1,12 +1,13 @@
 package galath.command;
 
-import galath.task.*;
-import galath.ui.*;
-import galath.storage.*;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
+import galath.storage.Storage;
+import galath.task.Task;
+import galath.task.TaskList;
+import galath.ui.Ui;
 
 /**
  * galath.command.Command to find tasks on a specific date.

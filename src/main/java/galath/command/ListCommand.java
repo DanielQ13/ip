@@ -1,8 +1,8 @@
 package galath.command;
 
-import galath.task.*;
-import galath.ui.*;
-import galath.storage.*;
+import galath.storage.Storage;
+import galath.task.TaskList;
+import galath.ui.Ui;
 
 /**
  * galath.command.Command to list all tasks.

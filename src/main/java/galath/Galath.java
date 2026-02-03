@@ -34,6 +34,15 @@ public class Galath {
     }
 
     /**
+     * Main entry point for the application.
+     *
+     * @param args galath.command.Command line arguments (not used)
+     */
+    public static void main(String[] args) {
+        new Galath(FILE_PATH).run();
+    }
+
+    /**
      * Runs the main program loop.
      */
     public void run() {
@@ -50,14 +59,5 @@ public class Galath {
             }
         }
         ui.close();
-    }
-
-    /**
-     * Main entry point for the application.
-     *
-     * @param args galath.command.Command line arguments (not used)
-     */
-    public static void main(String[] args) {
-        new Galath(FILE_PATH).run();
     }
 }

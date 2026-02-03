@@ -1,9 +1,10 @@
 package galath.command;
 
+import galath.exception.GalathException;
+import galath.storage.Storage;
 import galath.task.TaskList;
 import galath.ui.Ui;
-import galath.storage.Storage;
-import galath.exception.GalathException;
+
 /**
  * Abstract class representing a command.
  */
@@ -12,8 +13,8 @@ public abstract class Command {
     /**
      * Executes the command.
      *
-     * @param tasks The task list to operate on
-     * @param ui The UI to interact with the user
+     * @param tasks   The task list to operate on
+     * @param ui      The UI to interact with the user
      * @param storage The storage to save tasks
      * @throws GalathException if an error occurs during execution
      */

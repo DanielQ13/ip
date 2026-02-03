@@ -1,21 +1,41 @@
 package galath.parser;
 
-import galath.command.*;
+import galath.command.Command;
+import galath.command.FindOnCommand;
+import galath.command.ExitCommand;
+import galath.command.ListCommand;
+import galath.command.UnmarkCommand;
+import galath.command.DeleteCommand;
+import galath.command.AddTodoCommand;
+import galath.command.MarkCommand;
+import galath.command.AddDeadlineCommand;
+import galath.command.AddEventCommand;
 import galath.exception.GalathException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 /**
- * Parses user commands.
+ * Parses user input commands and converts them into Command objects.
+ *
+ * Supports the following commands:
+ * - bye: Exit the program
+ * - list: List all tasks
+ * - todo DESCRIPTION: Add a todo task
+ * - deadline DESCRIPTION /by DATE: Add a deadline task
+ * - event DESCRIPTION /from START /to END: Add an event task
+ * - mark INDEX: Mark a task as done
+ * - unmark INDEX: Mark a task as not done
+ * - delete INDEX: Delete a task
+ * - on DATE: Find tasks on a specific date
  */
 public class Parser {
 
     /**
-     * Parses a user command and returns the appropriate galath.command.Command object.
+     * Parses a user command and returns the appropriate Command object.
      *
      * @param fullCommand The full command string from the user
-     * @return The parsed galath.command.Command object
-     * @throws GalathException if the command is invalid
+     * @return The parsed Command object ready to be executed
+     * @throws GalathException if the command is invalid or malformed
      */
     public static Command parse(String fullCommand) throws GalathException {
         String trimmedCommand = fullCommand.trim();

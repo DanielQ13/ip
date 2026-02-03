@@ -1,14 +1,23 @@
 package galath.command;
 
-import galath.task.*;
-import galath.ui.*;
-import galath.storage.*;
+import galath.task.TaskList;
+import galath.ui.Ui;
+import galath.storage.Storage;
 
 /**
- * galath.command.Command to list all tasks.
+ * Command to list all tasks in the task list.
+ * Displays all tasks with their index numbers and completion status.
  */
 public class ListCommand extends Command {
 
+    /**
+     * Executes the list command by displaying all tasks.
+     * If the task list is empty, displays a message indicating so.
+     *
+     * @param tasks The task list to display
+     * @param ui The UI to display the task list
+     * @param storage The storage (not used)
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         if (tasks.size() == 0) {

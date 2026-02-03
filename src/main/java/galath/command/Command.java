@@ -4,13 +4,19 @@ import galath.task.TaskList;
 import galath.ui.Ui;
 import galath.storage.Storage;
 import galath.exception.GalathException;
+
 /**
- * Abstract class representing a command.
+ * Abstract class representing a user command.
+ * All specific commands (AddTodoCommand, DeleteCommand, etc.) inherit from this class.
+ *
+ * This design follows the Command pattern, allowing for easy extension
+ * of new command types without modifying existing code.
  */
 public abstract class Command {
 
     /**
      * Executes the command.
+     * Each subclass implements this method to perform its specific action.
      *
      * @param tasks The task list to operate on
      * @param ui The UI to interact with the user

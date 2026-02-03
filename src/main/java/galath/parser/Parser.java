@@ -9,6 +9,10 @@ import galath.command.AddTodoCommand;
 import galath.command.Command;
 import galath.command.DeleteCommand;
 import galath.command.ExitCommand;
+<<<<<<< HEAD
+=======
+import galath.command.FindCommand;
+>>>>>>> branch-Level-9
 import galath.command.FindOnCommand;
 import galath.command.ListCommand;
 import galath.command.MarkCommand;
@@ -17,7 +21,11 @@ import galath.exception.GalathException;
 
 /**
  * Parses user input commands and converts them into Command objects.
+<<<<<<< HEAD
  *
+=======
+ * <p>
+>>>>>>> branch-Level-9
  * Supports the following commands:
  * - bye: Exit the program
  * - list: List all tasks
@@ -27,6 +35,10 @@ import galath.exception.GalathException;
  * - mark INDEX: Mark a task as done
  * - unmark INDEX: Mark a task as not done
  * - delete INDEX: Delete a task
+<<<<<<< HEAD
+=======
+ * - find KEYWORD: Find tasks containing keyword
+>>>>>>> branch-Level-9
  * - on DATE: Find tasks on a specific date
  */
 public class Parser {
@@ -71,6 +83,10 @@ public class Parser {
             throw new GalathException("The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
         } else if (trimmedCommand.startsWith("on ")) {
             return parseOnCommand(trimmedCommand);
+        } else if (trimmedCommand.startsWith("find ")) {
+            return parseFindCommand(trimmedCommand);
+        } else if (trimmedCommand.equals("find")) {
+            throw new GalathException("Please specify a keyword to search for.\n     Example: find book");
         } else {
             throw new GalathException("I'm sorry, but I don't know what that means :-(");
         }
@@ -187,5 +203,13 @@ public class Parser {
         } catch (DateTimeParseException e) {
             throw new GalathException("Invalid date format. Please use: yyyy-MM-dd\n     Example: on 2019-12-02");
         }
+    }
+
+    private static Command parseFindCommand(String command) throws GalathException {
+        String keyword = command.substring(5).trim();
+        if (keyword.isEmpty()) {
+            throw new GalathException("Please specify a keyword to search for.\n     Example: find book");
+        }
+        return new FindCommand(keyword);
     }
 }

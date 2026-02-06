@@ -9,10 +9,7 @@ import galath.command.AddTodoCommand;
 import galath.command.Command;
 import galath.command.DeleteCommand;
 import galath.command.ExitCommand;
-<<<<<<< HEAD
-=======
 import galath.command.FindCommand;
->>>>>>> branch-Level-9
 import galath.command.FindOnCommand;
 import galath.command.ListCommand;
 import galath.command.MarkCommand;

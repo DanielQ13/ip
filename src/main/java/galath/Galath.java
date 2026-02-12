@@ -34,12 +34,21 @@ public class Galath {
     }
 
     /**
-     * Main entry point for the application.
+     * Gets the task list.
      *
-     * @param args galath.command.Command line arguments (not used)
+     * @return The TaskList instance
      */
-    public static void main(String[] args) {
-        new Galath(FILE_PATH).run();
+    public TaskList getTasks() {
+        return tasks;
+    }
+
+    /**
+     * Gets the storage instance.
+     *
+     * @return The Storage instance
+     */
+    public Storage getStorage() {
+        return storage;
     }
 
     /**
@@ -59,5 +68,14 @@ public class Galath {
             }
         }
         ui.close();
+    }
+
+    /**
+     * Main entry point for the application.
+     *
+     * @param args Command line arguments (not used)
+     */
+    public static void main(String[] args) {
+        new Galath(FILE_PATH).run();
     }
 }

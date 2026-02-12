@@ -1,0 +1,108 @@
+/* Main window background */
+.root {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Scroll pane */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: #f5f5f5;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Dialog container */
+.dialog-container {
+    -fx-padding: 10;
+    -fx-background-color: #f5f5f5;
+}
+
+/* Input field */
+.input-field {
+    -fx-font-size: 14px;
+    -fx-padding: 10;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1;
+}
+
+.input-field:focused {
+    -fx-border-color: #4a90e2;
+    -fx-border-width: 2;
+}
+
+/* Send button */
+.send-button {
+    -fx-background-color: #4a90e2;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+}
+
+.send-button:hover {
+    -fx-background-color: #3a7bc8;
+}
+
+.send-button:pressed {
+    -fx-background-color: #2a6ba8;
+}
+
+/* User message bubble */
+.user-bubble {
+    -fx-background-color: #4a90e2;
+    -fx-background-radius: 15 15 5 15;
+}
+
+.user-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+/* Galath message bubble */
+.galath-bubble {
+    -fx-background-color: #e9e9eb;
+    -fx-background-radius: 15 15 15 5;
+}
+
+.galath-label {
+    -fx-text-fill: #000000;
+    -fx-font-size: 14px;
+}
+
+/* Error message bubble */
+.error-bubble {
+    -fx-background-color: #ff6b6b;
+    -fx-background-radius: 15 15 15 5;
+}
+
+.error-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Success message bubble */
+.success-bubble {
+    -fx-background-color: #51cf66;
+    -fx-background-radius: 15 15 15 5;
+}
+
+.success-label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}
+
+/* Dialog bubble general */
+.dialog-bubble {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
+}
+
+.dialog-label {
+    -fx-wrap-text: true;
+    -fx-line-spacing: 2;
+}

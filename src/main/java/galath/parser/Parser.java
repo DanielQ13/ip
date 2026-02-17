@@ -18,7 +18,6 @@ import galath.exception.GalathException;
 
 /**
  * Parses user input commands and converts them into Command objects.
-<<<<<<< HEAD
  *
  * Supports the following commands (with aliases):
  * - bye (exit): Exit the program
@@ -48,74 +47,61 @@ public class Parser {
         // Normalize command by expanding aliases
         String normalizedCommand = expandAlias(trimmedCommand);
 
+        // Extract the first word as the keyword, rest as arguments
         String[] parts = normalizedCommand.split(" ", 2);
-        String command = parts[0];
-        String args = parts.length > 1 ? parts[1] : "";
+        String keyword = parts[0];
+        boolean hasArgs = parts.length > 1;
 
-        switch (command) {
+        switch (keyword) {
             case "bye":
-            case "exit":
                 return new ExitCommand();
-
             case "list":
                 return new ListCommand();
-
             case "mark":
-                if (args.isEmpty()) {
-                    throw new GalathException(
-                            "Please specify which task to mark.\n     Example: mark 2 or m 2");
+                if (!hasArgs) {
+                    throw new GalathException("Please specify which task to mark.\n     Example: mark 2 or m 2");
                 }
                 return parseMarkCommand(normalizedCommand);
-
             case "unmark":
-                if (args.isEmpty()) {
-                    throw new GalathException(
-                            "Please specify which task to unmark.\n     Example: unmark 2 or u 2");
+                if (!hasArgs) {
+                    throw new GalathException("Please specify which task to unmark.\n     Example: unmark 2 or u 2");
                 }
                 return parseUnmarkCommand(normalizedCommand);
-
             case "delete":
-                if (args.isEmpty()) {
-                    throw new GalathException(
-                            "Please specify which task to delete.\n     Example: delete 3 or del 3");
+                if (!hasArgs) {
+                    throw new GalathException("Please specify which task to delete.\n     Example: delete 3 or del 3");
                 }
                 return parseDeleteCommand(normalizedCommand);
-
             case "todo":
-                if (args.isEmpty()) {
-                    throw new GalathException(
-                            "The description of a todo cannot be empty.\n     Example: todo borrow book or t borrow book");
+                if (!hasArgs) {
+                    throw new GalathException("The description of a todo cannot be empty.\n     Example: todo borrow book or t borrow book");
                 }
                 return parseTodoCommand(normalizedCommand);
-
             case "deadline":
-                if (args.isEmpty()) {
-                    throw new GalathException(
-                            "The description of a deadline cannot be empty.\n     Example: deadline return book /by 2019-12-02 or d return book /by 2019-12-02");
+                if (!hasArgs) {
+                    throw new GalathException("The description of a deadline cannot be empty.\n     Example: deadline return book /by 2019-12-02 or d return book /by 2019-12-02");
                 }
                 return parseDeadlineCommand(normalizedCommand);
-
             case "event":
-                if (args.isEmpty()) {
-                    throw new GalathException(
-                            "The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
+                if (!hasArgs) {
+                    throw new GalathException("The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
                 }
                 return parseEventCommand(normalizedCommand);
-
             case "on":
+                if (!hasArgs) {
+                    throw new GalathException("Please specify a date.\n     Example: on 2019-12-02");
+                }
                 return parseOnCommand(normalizedCommand);
-
             case "find":
-                if (args.isEmpty()) {
-                    throw new GalathException(
-                            "Please specify a keyword to search for.\n     Example: find book or f book");
+                if (!hasArgs) {
+                    throw new GalathException("Please specify a keyword to search for.\n     Example: find book or f book");
                 }
                 return parseFindCommand(normalizedCommand);
-
+            case "sort":
+                return parseSortCommand(normalizedCommand);
             default:
                 throw new GalathException("I'm sorry, but I don't know what that means :-(");
         }
-
     }
 
     /**

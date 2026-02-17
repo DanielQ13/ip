@@ -80,7 +80,9 @@ public class MainWindow extends AnchorPane {
 
         userInput.clear();
 
-        if (input.equals("bye")) scheduleExit();
+        if (input.equals("bye") || input.equals("exit")) {
+            scheduleExit();
+        }
     }
 
     private DialogBox getGalathDialog(String response) {

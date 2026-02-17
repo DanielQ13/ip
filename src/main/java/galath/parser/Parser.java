@@ -18,30 +18,24 @@ import galath.exception.GalathException;
 
 /**
  * Parses user input commands and converts them into Command objects.
-<<<<<<< HEAD
  *
-=======
- * <p>
->>>>>>> branch-Level-9
- * Supports the following commands:
- * - bye: Exit the program
- * - list: List all tasks
- * - todo DESCRIPTION: Add a todo task
- * - deadline DESCRIPTION /by DATE: Add a deadline task
- * - event DESCRIPTION /from START /to END: Add an event task
- * - mark INDEX: Mark a task as done
- * - unmark INDEX: Mark a task as not done
- * - delete INDEX: Delete a task
-<<<<<<< HEAD
-=======
- * - find KEYWORD: Find tasks containing keyword
->>>>>>> branch-Level-9
- * - on DATE: Find tasks on a specific date
+ * Supports the following commands (with aliases):
+ * - bye (exit): Exit the program
+ * - list (l, ls): List all tasks
+ * - todo (t): Add a todo task
+ * - deadline (d): Add a deadline task
+ * - event (e): Add an event task
+ * - mark (m): Mark a task as done
+ * - unmark (u): Mark a task as not done
+ * - delete (del, rm): Delete a task
+ * - find (f): Find tasks containing keyword
+ * - on: Find tasks on a specific date
  */
 public class Parser {
 
     /**
      * Parses a user command and returns the appropriate Command object.
+     * Supports command aliases for more flexible syntax.
      *
      * @param fullCommand The full command string from the user
      * @return The parsed Command object ready to be executed
@@ -50,43 +44,77 @@ public class Parser {
     public static Command parse(String fullCommand) throws GalathException {
         String trimmedCommand = fullCommand.trim();
 
-        if (trimmedCommand.equals("bye")) {
+        // Normalize command by expanding aliases
+        String normalizedCommand = expandAlias(trimmedCommand);
+
+        if (normalizedCommand.equals("bye") || normalizedCommand.equals("exit")) {
             return new ExitCommand();
-        } else if (trimmedCommand.equals("list")) {
+        } else if (normalizedCommand.equals("list")) {
             return new ListCommand();
-        } else if (trimmedCommand.startsWith("mark ")) {
-            return parseMarkCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("mark")) {
-            throw new GalathException("Please specify which task to mark.\n     Example: mark 2");
-        } else if (trimmedCommand.startsWith("unmark ")) {
-            return parseUnmarkCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("unmark")) {
-            throw new GalathException("Please specify which task to unmark.\n     Example: unmark 2");
-        } else if (trimmedCommand.startsWith("delete ")) {
-            return parseDeleteCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("delete")) {
-            throw new GalathException("Please specify which task to delete.\n     Example: delete 3");
-        } else if (trimmedCommand.startsWith("todo ")) {
-            return parseTodoCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("todo")) {
-            throw new GalathException("The description of a todo cannot be empty.\n     Example: todo borrow book");
-        } else if (trimmedCommand.startsWith("deadline ")) {
-            return parseDeadlineCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("deadline")) {
-            throw new GalathException("The description of a deadline cannot be empty.\n     Example: deadline return book /by 2019-12-02 or deadline return book /by 2019-12-02 1800");
-        } else if (trimmedCommand.startsWith("event ")) {
-            return parseEventCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("event")) {
-            throw new GalathException("The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
-        } else if (trimmedCommand.startsWith("on ")) {
-            return parseOnCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith("find ")) {
-            return parseFindCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("find")) {
-            throw new GalathException("Please specify a keyword to search for.\n     Example: find book");
+        } else if (normalizedCommand.startsWith("mark ")) {
+            return parseMarkCommand(normalizedCommand);
+        } else if (normalizedCommand.equals("mark")) {
+            throw new GalathException("Please specify which task to mark.\n     Example: mark 2 or m 2");
+        } else if (normalizedCommand.startsWith("unmark ")) {
+            return parseUnmarkCommand(normalizedCommand);
+        } else if (normalizedCommand.equals("unmark")) {
+            throw new GalathException("Please specify which task to unmark.\n     Example: unmark 2 or u 2");
+        } else if (normalizedCommand.startsWith("delete ")) {
+            return parseDeleteCommand(normalizedCommand);
+        } else if (normalizedCommand.equals("delete")) {
+            throw new GalathException("Please specify which task to delete.\n     Example: delete 3 or del 3");
+        } else if (normalizedCommand.startsWith("todo ")) {
+            return parseTodoCommand(normalizedCommand);
+        } else if (normalizedCommand.equals("todo")) {
+            throw new GalathException("The description of a todo cannot be empty.\n     Example: todo borrow book or t borrow book");
+        } else if (normalizedCommand.startsWith("deadline ")) {
+            return parseDeadlineCommand(normalizedCommand);
+        } else if (normalizedCommand.equals("deadline")) {
+            throw new GalathException("The description of a deadline cannot be empty.\n     Example: deadline return book /by 2019-12-02 or d return book /by 2019-12-02");
+        } else if (normalizedCommand.startsWith("event ")) {
+            return parseEventCommand(normalizedCommand);
+        } else if (normalizedCommand.equals("event")) {
+            throw new GalathException("The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600 or e project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
+        } else if (normalizedCommand.startsWith("on ")) {
+            return parseOnCommand(normalizedCommand);
+        } else if (normalizedCommand.startsWith("find ")) {
+            return parseFindCommand(normalizedCommand);
+        } else if (normalizedCommand.equals("find")) {
+            throw new GalathException("Please specify a keyword to search for.\n     Example: find book or f book");
         } else {
             throw new GalathException("I'm sorry, but I don't know what that means :-(");
         }
+    }
+
+    /**
+     * Expands command aliases to their full forms.
+     *
+     * @param command The command string (possibly with alias)
+     * @return The command with alias expanded to full form
+     */
+    private static String expandAlias(String command) {
+        // Check if command starts with an alias
+        if (command.equals("t") || command.startsWith("t ")) {
+            return command.replaceFirst("^t", "todo");
+        } else if (command.equals("d") || command.startsWith("d ")) {
+            return command.replaceFirst("^d", "deadline");
+        } else if (command.equals("e") || command.startsWith("e ")) {
+            return command.replaceFirst("^e", "event");
+        } else if (command.equals("l") || command.equals("ls")) {
+            return "list";
+        } else if (command.equals("m") || command.startsWith("m ")) {
+            return command.replaceFirst("^m", "mark");
+        } else if (command.equals("u") || command.startsWith("u ")) {
+            return command.replaceFirst("^u", "unmark");
+        } else if (command.equals("del") || command.startsWith("del ")
+                || command.equals("rm") || command.startsWith("rm ")) {
+            return command.replaceFirst("^(del|rm)", "delete");
+        } else if (command.equals("f") || command.startsWith("f ")) {
+            return command.replaceFirst("^f", "find");
+        } else if (command.equals("exit")) {
+            return "bye";
+        }
+        return command;
     }
 
     private static Command parseMarkCommand(String command) throws GalathException {

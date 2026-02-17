@@ -18,6 +18,7 @@ import galath.exception.GalathException;
 
 /**
  * Parses user input commands and converts them into Command objects.
+<<<<<<< HEAD
  *
  * Supports the following commands (with aliases):
  * - bye (exit): Exit the program
@@ -115,6 +116,37 @@ public class Parser {
                 throw new GalathException("I'm sorry, but I don't know what that means :-(");
         }
 
+    }
+
+    /**
+     * Expands command aliases to their full forms.
+     *
+     * @param command The command string (possibly with alias)
+     * @return The command with alias expanded to full form
+     */
+    private static String expandAlias(String command) {
+        // Check if command starts with an alias
+        if (command.equals("t") || command.startsWith("t ")) {
+            return command.replaceFirst("^t", "todo");
+        } else if (command.equals("d") || command.startsWith("d ")) {
+            return command.replaceFirst("^d", "deadline");
+        } else if (command.equals("e") || command.startsWith("e ")) {
+            return command.replaceFirst("^e", "event");
+        } else if (command.equals("l") || command.equals("ls")) {
+            return "list";
+        } else if (command.equals("m") || command.startsWith("m ")) {
+            return command.replaceFirst("^m", "mark");
+        } else if (command.equals("u") || command.startsWith("u ")) {
+            return command.replaceFirst("^u", "unmark");
+        } else if (command.equals("del") || command.startsWith("del ")
+                || command.equals("rm") || command.startsWith("rm ")) {
+            return command.replaceFirst("^(del|rm)", "delete");
+        } else if (command.equals("f") || command.startsWith("f ")) {
+            return command.replaceFirst("^f", "find");
+        } else if (command.equals("exit")) {
+            return "bye";
+        }
+        return command;
     }
 
     /**

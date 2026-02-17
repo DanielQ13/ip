@@ -14,13 +14,23 @@ import galath.task.Deadline;
 import galath.task.Event;
 import galath.task.Task;
 import galath.task.Todo;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Handles loading and saving tasks to a file.
  */
 public class Storage {
-    private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     private final Path filePath;
+    private static final DateTimeFormatter STORAGE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     /**
      * Creates a Storage instance with the specified file path.
@@ -28,6 +38,8 @@ public class Storage {
      * @param filePath The relative path to the data file
      */
     public Storage(String filePath) {
+        assert filePath != null : "File path should not be null";
+        assert !filePath.trim().isEmpty() : "File path should not be empty";
         this.filePath = Paths.get(filePath);
     }
 
@@ -64,6 +76,7 @@ public class Storage {
             System.out.println("Warning: Unable to load data file. Starting with empty task list.");
         }
 
+        assert tasks != null : "Loaded task list should not be null";
         return tasks;
     }
 
@@ -74,10 +87,12 @@ public class Storage {
      * @throws IOException if unable to write to file
      */
     public void save(ArrayList<Task> tasks) throws IOException {
+        assert tasks != null : "Task list to save should not be null";
         createFileIfNotExists();
 
         FileWriter writer = new FileWriter(filePath.toFile());
         for (Task task : tasks) {
+            assert task != null : "Individual task in list should not be null";
             writer.write(convertTaskToLine(task) + System.lineSeparator());
         }
         writer.close();
@@ -102,11 +117,11 @@ public class Storage {
     }
 
     /**
-     * Parses a line from the file into a galath.task.Task object.
+     * Parses a line from the file into a Task object.
      * Format: TaskType | isDone | description | [extra fields]
      *
      * @param line The line to parse
-     * @return The parsed galath.task.Task, or null if invalid
+     * @return The parsed Task, or null if invalid
      */
     private Task parseTaskFromLine(String line) {
         if (line.trim().isEmpty()) {
@@ -126,22 +141,22 @@ public class Storage {
 
         try {
             switch (taskType) {
-            case "T":
-                task = new Todo(description);
-                break;
-            case "D":
-                if (parts.length >= 4) {
-                    LocalDateTime by = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
-                    task = new Deadline(description, by);
-                }
-                break;
-            case "E":
-                if (parts.length >= 5) {
-                    LocalDateTime from = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
-                    LocalDateTime to = LocalDateTime.parse(parts[4], STORAGE_FORMAT);
-                    task = new Event(description, from, to);
-                }
-                break;
+                case "T":
+                    task = new Todo(description);
+                    break;
+                case "D":
+                    if (parts.length >= 4) {
+                        LocalDateTime by = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
+                        task = new Deadline(description, by);
+                    }
+                    break;
+                case "E":
+                    if (parts.length >= 5) {
+                        LocalDateTime from = LocalDateTime.parse(parts[3], STORAGE_FORMAT);
+                        LocalDateTime to = LocalDateTime.parse(parts[4], STORAGE_FORMAT);
+                        task = new Event(description, from, to);
+                    }
+                    break;
             }
         } catch (Exception e) {
             return null;  // Skip if parsing fails
@@ -155,14 +170,16 @@ public class Storage {
     }
 
     /**
-     * Converts a galath.task.Task object to a line for saving to file.
+     * Converts a Task object to a line for saving to file.
      * Format: TaskType | isDone | description | [extra fields]
      *
      * @param task The task to convert
      * @return The formatted line
      */
     private String convertTaskToLine(Task task) {
+        assert task != null : "Task to convert should not be null";
         String isDone = task.getIsDone() ? "1" : "0";
+        assert isDone.equals("0") || isDone.equals("1") : "isDone flag must be 0 or 1";
         String line = "";
 
         if (task instanceof Todo) {
@@ -178,6 +195,7 @@ public class Storage {
             line = "E | " + isDone + " | " + task.getDescription() + " | " + fromStr + " | " + toStr;
         }
 
+        assert !line.isEmpty() : "Converted task line should not be empty";
         return line;
     }
 }

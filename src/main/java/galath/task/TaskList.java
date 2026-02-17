@@ -16,6 +16,8 @@ public class TaskList {
      */
     public TaskList() {
         this.tasks = new ArrayList<>();
+        assert tasks != null : "Tasks list should be initialized";
+        assert tasks.isEmpty() : "New empty TaskList should have no tasks";
     }
 
     /**
@@ -24,6 +26,7 @@ public class TaskList {
      * @param tasks The list of tasks to initialize with
      */
     public TaskList(ArrayList<Task> tasks) {
+        assert tasks != null : "Tasks list passed to TaskList should not be null";
         this.tasks = tasks;
     }
 
@@ -33,7 +36,10 @@ public class TaskList {
      * @param task The task to add
      */
     public void addTask(Task task) {
+        assert task != null : "Cannot add a null task to the list";
+        int sizeBefore = tasks.size();
         tasks.add(task);
+        assert tasks.size() == sizeBefore + 1 : "Task list size should increase by 1 after adding";
     }
 
     /**
@@ -44,10 +50,15 @@ public class TaskList {
      * @throws GalathException if the index is invalid
      */
     public Task deleteTask(int index) throws GalathException {
+        assert index >= 0 : "Task index should not be negative";
         if (index < 0 || index >= tasks.size()) {
             throw new GalathException("Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
         }
-        return tasks.remove(index);
+        int sizeBefore = tasks.size();
+        Task removed = tasks.remove(index);
+        assert removed != null : "Removed task should not be null";
+        assert tasks.size() == sizeBefore - 1 : "Task list size should decrease by 1 after deletion";
+        return removed;
     }
 
     /**
@@ -58,10 +69,13 @@ public class TaskList {
      * @throws GalathException if the index is invalid
      */
     public Task getTask(int index) throws GalathException {
+        assert index >= 0 : "Task index should not be negative";
         if (index < 0 || index >= tasks.size()) {
             throw new GalathException("Task number " + (index + 1) + " does not exist. You have " + tasks.size() + " task(s) in your list.");
         }
-        return tasks.get(index);
+        Task task = tasks.get(index);
+        assert task != null : "Retrieved task should not be null";
+        return task;
     }
 
     /**

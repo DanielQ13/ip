@@ -18,30 +18,24 @@ import galath.exception.GalathException;
 
 /**
  * Parses user input commands and converts them into Command objects.
-<<<<<<< HEAD
  *
-=======
- * <p>
->>>>>>> branch-Level-9
- * Supports the following commands:
- * - bye: Exit the program
- * - list: List all tasks
- * - todo DESCRIPTION: Add a todo task
- * - deadline DESCRIPTION /by DATE: Add a deadline task
- * - event DESCRIPTION /from START /to END: Add an event task
- * - mark INDEX: Mark a task as done
- * - unmark INDEX: Mark a task as not done
- * - delete INDEX: Delete a task
-<<<<<<< HEAD
-=======
- * - find KEYWORD: Find tasks containing keyword
->>>>>>> branch-Level-9
- * - on DATE: Find tasks on a specific date
+ * Supports the following commands (with aliases):
+ * - bye (exit): Exit the program
+ * - list (l, ls): List all tasks
+ * - todo (t): Add a todo task
+ * - deadline (d): Add a deadline task
+ * - event (e): Add an event task
+ * - mark (m): Mark a task as done
+ * - unmark (u): Mark a task as not done
+ * - delete (del, rm): Delete a task
+ * - find (f): Find tasks containing keyword
+ * - on: Find tasks on a specific date
  */
 public class Parser {
 
     /**
      * Parses a user command and returns the appropriate Command object.
+     * Supports command aliases for more flexible syntax.
      *
      * @param fullCommand The full command string from the user
      * @return The parsed Command object ready to be executed
@@ -94,6 +88,37 @@ public class Parser {
             default:
                 throw new GalathException("I'm sorry, but I don't know what that means :-(");
         }
+    }
+
+    /**
+     * Expands command aliases to their full forms.
+     *
+     * @param command The command string (possibly with alias)
+     * @return The command with alias expanded to full form
+     */
+    private static String expandAlias(String command) {
+        // Check if command starts with an alias
+        if (command.equals("t") || command.startsWith("t ")) {
+            return command.replaceFirst("^t", "todo");
+        } else if (command.equals("d") || command.startsWith("d ")) {
+            return command.replaceFirst("^d", "deadline");
+        } else if (command.equals("e") || command.startsWith("e ")) {
+            return command.replaceFirst("^e", "event");
+        } else if (command.equals("l") || command.equals("ls")) {
+            return "list";
+        } else if (command.equals("m") || command.startsWith("m ")) {
+            return command.replaceFirst("^m", "mark");
+        } else if (command.equals("u") || command.startsWith("u ")) {
+            return command.replaceFirst("^u", "unmark");
+        } else if (command.equals("del") || command.startsWith("del ")
+                || command.equals("rm") || command.startsWith("rm ")) {
+            return command.replaceFirst("^(del|rm)", "delete");
+        } else if (command.equals("f") || command.startsWith("f ")) {
+            return command.replaceFirst("^f", "find");
+        } else if (command.equals("exit")) {
+            return "bye";
+        }
+        return command;
     }
 
     private static Command parseMarkCommand(String command) throws GalathException {

@@ -49,43 +49,50 @@ public class Parser {
      */
     public static Command parse(String fullCommand) throws GalathException {
         String trimmedCommand = fullCommand.trim();
+        String[] parts = trimmedCommand.split(" ", 2);
+        String keyword = parts[0];
+        boolean hasArgs = parts.length > 1 && !parts[1].isBlank();
 
-        if (trimmedCommand.equals("bye")) {
-            return new ExitCommand();
-        } else if (trimmedCommand.equals("list")) {
-            return new ListCommand();
-        } else if (trimmedCommand.startsWith("mark ")) {
-            return parseMarkCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("mark")) {
-            throw new GalathException("Please specify which task to mark.\n     Example: mark 2");
-        } else if (trimmedCommand.startsWith("unmark ")) {
-            return parseUnmarkCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("unmark")) {
-            throw new GalathException("Please specify which task to unmark.\n     Example: unmark 2");
-        } else if (trimmedCommand.startsWith("delete ")) {
-            return parseDeleteCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("delete")) {
-            throw new GalathException("Please specify which task to delete.\n     Example: delete 3");
-        } else if (trimmedCommand.startsWith("todo ")) {
-            return parseTodoCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("todo")) {
-            throw new GalathException("The description of a todo cannot be empty.\n     Example: todo borrow book");
-        } else if (trimmedCommand.startsWith("deadline ")) {
-            return parseDeadlineCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("deadline")) {
-            throw new GalathException("The description of a deadline cannot be empty.\n     Example: deadline return book /by 2019-12-02 or deadline return book /by 2019-12-02 1800");
-        } else if (trimmedCommand.startsWith("event ")) {
-            return parseEventCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("event")) {
-            throw new GalathException("The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
-        } else if (trimmedCommand.startsWith("on ")) {
-            return parseOnCommand(trimmedCommand);
-        } else if (trimmedCommand.startsWith("find ")) {
-            return parseFindCommand(trimmedCommand);
-        } else if (trimmedCommand.equals("find")) {
-            throw new GalathException("Please specify a keyword to search for.\n     Example: find book");
-        } else {
-            throw new GalathException("I'm sorry, but I don't know what that means :-(");
+        switch (keyword) {
+            case "bye":
+                return new ExitCommand();
+
+            case "list":
+                return new ListCommand();
+
+            case "mark":
+                if (!hasArgs) throw new GalathException("Please specify which task to mark.\n     Example: mark 2");
+                return parseMarkCommand(trimmedCommand);
+
+            case "unmark":
+                if (!hasArgs) throw new GalathException("Please specify which task to unmark.\n     Example: unmark 2");
+                return parseUnmarkCommand(trimmedCommand);
+
+            case "delete":
+                if (!hasArgs) throw new GalathException("Please specify which task to delete.\n     Example: delete 3");
+                return parseDeleteCommand(trimmedCommand);
+
+            case "todo":
+                if (!hasArgs) throw new GalathException("The description of a todo cannot be empty.\n     Example: todo borrow book");
+                return parseTodoCommand(trimmedCommand);
+
+            case "deadline":
+                if (!hasArgs) throw new GalathException("The description of a deadline cannot be empty.\n     Example: deadline return book /by 2019-12-02 or deadline return book /by 2019-12-02 1800");
+                return parseDeadlineCommand(trimmedCommand);
+
+            case "event":
+                if (!hasArgs) throw new GalathException("The description of an event cannot be empty.\n     Example: event project meeting /from 2019-12-02 1400 /to 2019-12-02 1600");
+                return parseEventCommand(trimmedCommand);
+
+            case "on":
+                return parseOnCommand(trimmedCommand);
+
+            case "find":
+                if (!hasArgs) throw new GalathException("Please specify a keyword to search for.\n     Example: find book");
+                return parseFindCommand(trimmedCommand);
+
+            default:
+                throw new GalathException("I'm sorry, but I don't know what that means :-(");
         }
     }
 

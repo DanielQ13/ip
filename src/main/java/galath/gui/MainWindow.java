@@ -71,54 +71,38 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText().trim();
-        if (input.isEmpty()) {
-            return;
-        }
+        if (input.isEmpty()) return;
 
-        // Show user input
-        dialogContainer.getChildren().add(
-                DialogBox.getUserDialog(input, userImage)
+        dialogContainer.getChildren().addAll(
+                DialogBox.getUserDialog(input, userImage),
+                getGalathDialog(getResponse(input))
         );
-
-        // Get response from Galath
-        String response = getResponse(input);
-
-        // Determine response type
-        boolean isError = response.startsWith("OOPS!!!");
-        boolean isSuccess = response.contains("Got it. I've added")
-                || response.contains("Nice! I've marked")
-                || response.contains("Noted. I've removed")
-                || response.contains("OK, I've marked");
-        boolean isExit = input.equals("bye");
-
-        // Show Galath's response
-        if (isError) {
-            dialogContainer.getChildren().add(
-                    DialogBox.getErrorDialog(response, galathImage)
-            );
-        } else if (isSuccess) {
-            dialogContainer.getChildren().add(
-                    DialogBox.getSuccessDialog(response, galathImage)
-            );
-        } else {
-            dialogContainer.getChildren().add(
-                    DialogBox.getGalathDialog(response, galathImage)
-            );
-        }
 
         userInput.clear();
 
-        // Exit after showing goodbye message
-        if (isExit) {
-            Platform.runLater(() -> {
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Platform.exit();
-            });
+        if (input.equals("bye") || input.equals("exit")) {
+            scheduleExit();
         }
+    }
+
+    private DialogBox getGalathDialog(String response) {
+        if (response.startsWith("OOPS!!!")) return DialogBox.getErrorDialog(response, galathImage);
+        if (isSuccessResponse(response))   return DialogBox.getSuccessDialog(response, galathImage);
+        return DialogBox.getGalathDialog(response, galathImage);
+    }
+
+    private boolean isSuccessResponse(String response) {
+        return response.contains("Got it. I've added")
+                || response.contains("Nice! I've marked")
+                || response.contains("Noted. I've removed")
+                || response.contains("OK, I've marked");
+    }
+
+    private void scheduleExit() {
+        Platform.runLater(() -> {
+            try { Thread.sleep(1500); } catch (InterruptedException e) { e.printStackTrace(); }
+            Platform.exit();
+        });
     }
 
     /**

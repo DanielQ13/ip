@@ -1,6 +1,36 @@
-D | 0 | return the book | 2018-10-05T00:00:00
-D | 0 | prepare presentation | 2019-03-04T00:00:00
-D | 0 | submit essay | 2020-12-09T00:00:00
-D | 0 | apply for internship | 2022-09-11T00:00:00
-T | 0 | submit MA2202 assignment
-E | 0 | attend CS3243 lecture | 2019-11-02T14:00:00 | 2019-11-02T16:00:00
+D | 0 | leap year | 2024-02-29T00:00:00
+D | 0 | return book | 2024-12-20T00:00:00
+D | 0 | return book | 2024-12-20T00:00:00
+D | 0 | date only | 2024-12-25T00:00:00
+D | 0 | report (final version) | 2024-12-25T00:00:00
+D | 0 | spaced task | 2024-12-25T00:00:00
+D | 0 | submit book review | 2024-12-25T00:00:00
+D | 0 | submit form #789 | 2024-12-25T00:00:00
+D | 0 | submit report | 2024-12-25T00:00:00
+D | 0 | y | 2024-12-25T00:00:00
+D | 0 | with time | 2024-12-25T14:30:00
+D | 0 | party prep 🎉 | 2024-12-31T00:00:00
+D | 0 | new year | 2024-12-31T23:59:00
+E | 0 | book club meeting | 2024-12-18T14:00:00 | 2024-12-18T16:00:00
+E | 1 | meeting | 2024-12-18T14:00:00 | 2024-12-18T16:00:00
+E | 0 | meeting: Q4 review | 2024-12-20T14:00:00 | 2024-12-20T16:00:00
+E | 0 | bad | 2024-12-25T00:00:00 | 2024-12-24T00:00:00
+E | 0 | midnight test | 2024-12-25T00:00:00 | 2024-12-25T00:00:00
+E | 0 | midnight test | 2024-12-25T00:00:00 | 2024-12-25T00:01:00
+E | 0 | midnight test | 2024-12-25T00:00:00 | 2024-12-25T00:00:00
+E | 0 | multi day | 2024-12-25T00:00:00 | 2024-12-30T00:00:00
+E | 0 | same day | 2024-12-25T09:00:00 | 2024-12-25T17:00:00
+E | 0 | same day | 2024-12-25T09:00:00 | 2024-12-25T17:00:00
+T | 0 | buy groceries 🛒
+T | 0 | buy milk, eggs, bread
+T | 0 | read book
+T | 0 | task 123 for project 456
+T | 0 | task with spaces
+T | 0 | this is a very long task description that goes on and on and on and should still work correctly even though it is extremely long and verbose
+T | 0 | write essay
+T | 0 | x
+T | 0 | persistent task 1
+T | 0 | "quoted task"
+T | 0 | task\with\backslashes
+D | 0 | final (v2) | 2024-12-25T00:00:00
+T | 0 | task with | pipe

@@ -1,7 +1,11 @@
 package galath.parser;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
+import java.util.List;
 
 import galath.command.AddDeadlineCommand;
 import galath.command.AddEventCommand;
@@ -33,7 +37,12 @@ import galath.exception.GalathException;
  * - on: Find tasks on a specific date
  */
 public class Parser {
-
+    private static final List<DateTimeFormatter> DATE_TIME_FORMATTERS = Arrays.asList(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),   // 2024-12-25 1700
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"),  // 2024-12-25 17:00
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm") // 2024-12-25T17:00
+    );
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE; // yyyy-MM-dd
     /**
      * Parses a user command and returns the appropriate Command object.
      * Supports command aliases for more flexible syntax.
@@ -101,7 +110,7 @@ public class Parser {
             case "sort":
                 return parseSortCommand(normalizedCommand);
             default:
-                throw new GalathException("I'm sorry, but I don't know what that means :-(");
+                throw new GalathException("I'm sorry, but I don't know what that means :-(\n    Available commands: todo, deadline, event, list, mark, unmark, delete, find, on, sort, bye");
         }
     }
 
@@ -233,6 +242,13 @@ public class Parser {
         if (to.isEmpty()) {
             throw new GalathException("Please specify when the event ends.");
         }
+
+        LocalDateTime start = parseFlexible(from, false);
+        LocalDateTime end   = parseFlexible(to, true);
+        if (end.isBefore(start)) {
+            throw new GalathException("The event end time must be after the start time.");
+        }
+
         return new AddEventCommand(description, from, to);
     }
 
@@ -285,6 +301,27 @@ public class Parser {
                                 + "     sort event    - sort events chronologically\n"
                                 + "     sort type     - group by type (Todos, Deadlines, Events)"
                 );
+        }
+    }
+
+    private static LocalDateTime parseFlexible(String input, boolean treatAsEnd) throws GalathException {
+        input = input.trim();
+        for (DateTimeFormatter f : DATE_TIME_FORMATTERS) {
+            try {
+                return LocalDateTime.parse(input, f);
+            } catch (DateTimeParseException ignored) { }
+        }
+        try {
+            LocalDate d = LocalDate.parse(input, DATE_FORMATTER);
+            if (treatAsEnd) {
+                // inclusive end-of-day for date-only "to" inputs
+                return d.atTime(23, 59, 59, 999_999_999);
+            } else {
+                // start-of-day for date-only "from" inputs
+                return d.atStartOfDay();
+            }
+        } catch (DateTimeParseException ex) {
+            throw new GalathException("Invalid date/time: '" + input + "'. Use yyyy-MM-dd or yyyy-MM-dd HHmm (or HH:mm).");
         }
     }
 }

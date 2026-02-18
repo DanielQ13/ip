@@ -13,6 +13,7 @@ import galath.command.FindCommand;
 import galath.command.FindOnCommand;
 import galath.command.ListCommand;
 import galath.command.MarkCommand;
+import galath.command.SortCommand;
 import galath.command.UnmarkCommand;
 import galath.exception.GalathException;
 
@@ -254,5 +255,36 @@ public class Parser {
             throw new GalathException("Please specify a keyword to search for.\n     Example: find book");
         }
         return new FindCommand(keyword);
+    }
+
+    /**
+     * Parses a sort command and returns the appropriate SortCommand.
+     * Supported options: sort name, sort deadline, sort event, sort type.
+     *
+     * @param command The full sort command string
+     * @return The appropriate SortCommand
+     * @throws GalathException if the sort option is missing or invalid
+     */
+    private static Command parseSortCommand(String command) throws GalathException {
+        String option = command.substring(4).trim().toLowerCase();
+
+        switch (option) {
+            case "name":
+                return new SortCommand(SortCommand.SortType.NAME);
+            case "deadline":
+                return new SortCommand(SortCommand.SortType.DEADLINE);
+            case "event":
+                return new SortCommand(SortCommand.SortType.EVENT);
+            case "type":
+                return new SortCommand(SortCommand.SortType.TYPE);
+            default:
+                throw new GalathException(
+                        "Invalid sort option. Available options:\n"
+                                + "     sort name     - sort all tasks alphabetically\n"
+                                + "     sort deadline - sort deadlines chronologically\n"
+                                + "     sort event    - sort events chronologically\n"
+                                + "     sort type     - group by type (Todos, Deadlines, Events)"
+                );
+        }
     }
 }

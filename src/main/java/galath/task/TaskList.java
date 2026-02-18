@@ -5,7 +5,6 @@ import galath.exception.GalathException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.time.LocalDate;
 
 /**
  * Manages the list of tasks.
@@ -144,5 +143,90 @@ public class TaskList {
         }
 
         return matchingTasks;
+    }
+
+    /**
+     * Sorts all tasks alphabetically by description (case-insensitive).
+     */
+    public void sortByName() {
+        tasks.sort(Comparator.comparing(
+                t -> t.getDescription().toLowerCase()
+        ));
+        assert isSortedByName() : "Tasks should be sorted by name after sortByName()";
+    }
+
+    /**
+     * Sorts only Deadline tasks chronologically by due date.
+     * Non-deadline tasks maintain their relative order and come after deadlines.
+     */
+    public void sortDeadlines() {
+        // Separate deadlines from the rest
+        ArrayList<Task> deadlines = new ArrayList<>();
+        ArrayList<Task> others = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task instanceof Deadline) {
+                deadlines.add(task);
+            } else {
+                others.add(task);
+            }
+        }
+
+        deadlines.sort(Comparator.comparing(t -> ((Deadline) t).getBy()));
+
+        tasks.clear();
+        tasks.addAll(deadlines);
+        tasks.addAll(others);
+    }
+
+    /**
+     * Sorts only Event tasks chronologically by start date.
+     * Non-event tasks maintain their relative order and come after events.
+     */
+    public void sortEvents() {
+        // Separate events from the rest
+        ArrayList<Task> events = new ArrayList<>();
+        ArrayList<Task> others = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task instanceof Event) {
+                events.add(task);
+            } else {
+                others.add(task);
+            }
+        }
+
+        events.sort(Comparator.comparing(t -> ((Event) t).getFrom()));
+
+        tasks.clear();
+        tasks.addAll(events);
+        tasks.addAll(others);
+    }
+
+    /**
+     * Sorts tasks by type: Todos first, then Deadlines, then Events.
+     * Within each type, the original order is preserved.
+     */
+    public void sortByType() {
+        tasks.sort(Comparator.comparingInt(t -> {
+            if (t instanceof Todo) return 0;
+            if (t instanceof Deadline) return 1;
+            return 2; // Event
+        }));
+    }
+
+    /**
+     * Checks if tasks are sorted alphabetically by name.
+     * Used for assertion verification only.
+     */
+    private boolean isSortedByName() {
+        for (int i = 0; i < tasks.size() - 1; i++) {
+            String a = tasks.get(i).getDescription().toLowerCase();
+            String b = tasks.get(i + 1).getDescription().toLowerCase();
+            if (a.compareTo(b) > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -4,7 +4,7 @@
 
 Galath is a powerful yet simple task management chatbot that helps you organize your life through an intuitive command-line or graphical interface. Never forget a deadline or miss an important event again!
 
-![Galath Demo](docs/Ui.png)
+![Galath Demo](Ui.png)
 *Screenshot: Galath GUI in action*
 
 ---

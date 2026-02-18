@@ -1,9 +1,6 @@
-T | 0 | 123
-T | 0 | 124
-T | 0 | 1jks
-T | 0 | abcde
-T | 0 | ajsfna
-T | 0 | n32kj
-D | 0 | 1fda | 2019-04-30T00:00:00
-D | 0 | aksdb | 2019-12-04T00:00:00
-D | 0 | return book | 2020-11-11T00:00:00
+D | 0 | return the book | 2018-10-05T00:00:00
+D | 0 | prepare presentation | 2019-03-04T00:00:00
+D | 0 | submit essay | 2020-12-09T00:00:00
+D | 0 | apply for internship | 2022-09-11T00:00:00
+T | 0 | submit MA2202 assignment
+E | 0 | attend CS3243 lecture | 2019-11-02T14:00:00 | 2019-11-02T16:00:00
